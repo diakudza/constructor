@@ -1,16 +1,33 @@
 
 let textArea = document.getElementById('textArea');
-let btn1 = document.getElementById('torcovka');
-let btn2 = document.getElementById('centrovka');
-let btn3 = document.getElementById('sverlo');
-let btn4 = document.getElementById('rezba');
+let divWithBtn = document.getElementById('divWithBtn');
 
 function strToText(n) {
     var arr = blocks[n].split(';');
     return arr.join('\n');
 }
+let goEgit = {
+    start: 0,
+    generate() { //метод запуска рендера кнопок
+        if (goEgit.start === 0) {
+            generateBtn();
+            document.getElementById('generate').remove();
 
-btn1.onclick = function () { textArea.innerHTML += strToText('centr'); };
-btn2.onclick = function () { textArea.innerHTML += strToText('torcovka'); };
-btn3.onclick = function () { textArea.innerHTML += strToText('sverlo'); };
-btn4.onclick = function () { textArea.innerHTML += strToText('rezba'); };
+
+        }
+    }
+}
+
+function generateBtn() {
+    for (let oper in blocks) {
+        let btn = document.createElement('button');
+        btn.id = oper;
+        btn.innerText = oper;
+        btn.onclick = btnDo;
+        divWithBtn.append(btn);
+    }
+}
+
+function btnDo(e) {
+    textArea.innerHTML += strToText(e.target.id);
+};
