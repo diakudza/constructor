@@ -6,6 +6,7 @@ let goEgit = {
     start: 0,
     generate() { //метод запуска рендера кнопок и шапки 
         if (goEgit.start === 0) {
+            this.start = 1;
             generateBtn();
             document.getElementById('generate').remove();
             let btnSave = document.createElement('a');
