@@ -16,8 +16,18 @@ div {
     width: 50%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     
+    justify-content: center;
+}
+#divWithBtn button {
+    width: 100px;
+    height: 40px;
+}
+#save {
+    width: 100px;
+    height: 40px;
+    text-decoration: none;
+    border: 1px solid black;
 }
 #textArea {
     width: 100%;

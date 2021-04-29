@@ -1,5 +1,7 @@
-let standart =
-    ['#531=',
+let standart = //стандартные перменные, будут вставляться всегда в шапку
+    ['%',
+        'O0001(BOLT/VINT UNI - HD1)',
+        '#531=',
         '#1=0(0-KR,1-SK)',
         '#2=10.0(RAZMER ZAGOTOVKI)',
         '#530=0(DLINA DETALI)',
@@ -29,12 +31,14 @@ let standart =
 // IF[#106EQ0]THEN#106=[#530-#104](DLINA T,L0)
 // IF[#1EQ0]THEN#531=[#2+1.0](DIAM ZAGOTOVKI KRYG+1MM)
 // IF[#1EQ1]THEN#531=[#2*1.155+1.0](DIAM ZAGOTOVKI SK+1MM)
-let blocks = {
 
-    centr: {
-        item: "Центровка",
-        variables: "#109=0(IF LT0 HD2)(GLUBINA CENTROVKI);",
-        code: "N14(CENTROVKA);T1400;G97S1300M3;M68;G0G99X0.0Z-2.0(Z-5.0)T14;M69;M1;M77;(M300);G1Z#109F0.03;G4U0.2;M68;G1Z-1.0F0.5;(M301);G0Z-2.0(Z-3.0);M69;M78;G0T0;M1"
+
+let blocks = {
+    //Объекст со стандартными блоками
+    centr: {//название блока, используется для вставок в id кнопок и поиска
+        item: "Центровка", //Обозначение блока на русском
+        variables: "#109=0(IF LT0 HD2)(GLUBINA CENTROVKI);",//переменные для блока, добавляются в шапку программы
+        code: "N14(CENTROVKA);T1400;G97S1300M3;M68;G0G99X0.0Z-2.0(Z-5.0)T14;M69;M1;M77;(M300);G1Z#109F0.03;G4U0.2;M68;G1Z-1.0F0.5;(M301);G0Z-2.0(Z-3.0);M69;M78;G0T0;M1"//код блока
     },
 
     sverlo: {
@@ -59,3 +63,8 @@ let blocks = {
     }
 }
 
+let existProg = ['',
+    'G0G99G40G97M9(STANDART);G80M22;M98P6016;N99(PROGRAMM START);G99G97G40M9;G50S3000;M200(WARTECODE);M20(ONE CYCLE);/M25;G97S2000M3;M68;G1G99X#531W-12.0T0F1.0;M69;M27;G4U0.1;',
+    '',
+    'N100(OTREZKA);G0G99G40G97M9(STANDART);T100;G97S1000M4(+M4+);G0G99X#531Z[#530+#510+#509]T1;M82;M40;G1X[#531-2.0]F0.015;G1X2.0F#511;G1X-#528F0.015;M41;M83;M80;/M98P7016;M81;G97S500M4(+M4+);M11;G4U0.3;G0Z-0.15T0;M10;G4U0.3;M5;G0W-0.2;G4U0.2;GOTO99;M99;%;'
+];//собранный массив с готовой программой
