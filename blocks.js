@@ -1,7 +1,6 @@
 let standart = //стандартные перменные, будут вставляться всегда в шапку
     ['%',
         'O0001(BOLT/VINT UNI - HD1)',
-        '#531=',
         '#1=0(0-KR,1-SK)',
         '#2=10.0(RAZMER ZAGOTOVKI)',
         '#530=0(DLINA DETALI)',
@@ -23,6 +22,7 @@ let standart = //стандартные перменные, будут вста�
         '#509=0(PRIPUSK NA HEAD-2)',
         '#528=1.0(OTREZAT DO X-)',
         '#508=11.0(15.0+++)(OVER-TRAVEL Z1)',
+        '#531=0(DLINA DETALI)'
     ];
 
 // IF[#530EQ0]THEN#530=[#103+#104](DLINA DETALI)
@@ -76,6 +76,7 @@ let blocks = {
         variables: "",
         code: "N3100(MODYL FREZEROVANIA SLITZCA);G65P8060F#9; ;"
     },
+
 
 
 

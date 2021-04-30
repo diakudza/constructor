@@ -4,6 +4,7 @@ let divWithBtn = document.getElementById('divWithBtn');
 
 let goEgit = {
     start: 0,
+    blocks: 0,
     generate() { //метод запуска рендера кнопок и шапки 
         if (goEgit.start === 0) {
             this.start = 1;
@@ -19,11 +20,14 @@ let goEgit = {
 
     },
     generateProg() { //склеиваем собранную прогрмамму в массив, и выводим в файл
-        existProg[0] = textVariables.innerHTML;
-        existProg[2] = textArea.innerHTML;
+        existProg[0] = textVariables.value;
+        existProg[2] = textArea.value;
         let myData = 'data:application/txt;charset=utf-8,' + encodeURIComponent(existProg[0] + existProg[1].split(';').join('\n') + existProg[2] + existProg[3].split(';').join('\n'));
         this.href = myData;
         this.download = 'O0020.txt';
+    },
+    removeBlock(e) {
+
     }
 }
 /**
@@ -31,7 +35,7 @@ let goEgit = {
 */
 function generateStandartVar() {
     for (let variables of standart) {
-        textVariables.innerHTML += variables + '\n';
+        textVariables.value += variables + '\n';
     }
 }
 
@@ -56,8 +60,10 @@ function generateBtn() {
 function btnDo(e) {
     let textArea = document.getElementById('textArea');
     let textVariables = document.getElementById('textVariables');
-    textArea.innerHTML += strToText(e.target.id, 'code');
-    textVariables.innerHTML += strToText(e.target.id, 'variables');
+    let divBlocks = document.getElementsByClassName('divBlocks')[0];
+    textArea.value += strToText(e.target.id, 'code');
+    textVariables.value += strToText(e.target.id, 'variables');
+    divBlocks.append(createBlock(e.target.id, 'code'));
 };
 
 
@@ -69,4 +75,22 @@ function btnDo(e) {
 function strToText(n, type) {
     let arr = blocks[n][type].split(';');
     return arr.join('\n');
+}
+
+function createBlock(n, type) {
+    let fragment = new DocumentFragment(),
+        p = document.createElement('p'),
+        span = document.createElement("span"),
+        textArea = document.createElement("textarea"),
+        div = document.createElement("div");
+    goEgit.blocks++;
+    div.id = n + 'Block' + goEgit.blocks;
+    div.classList.add('block');
+    textArea.classList.add('BlockTextArea');
+    p.innerText = blocks[n].item;
+    textArea.value = strToText(n, type);
+    div.append(p, textArea);
+    fragment.append(div);
+
+    return fragment;
 }
