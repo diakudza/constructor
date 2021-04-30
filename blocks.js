@@ -1,29 +1,87 @@
-let standart = //стандартные перменные, будут вставляться всегда в шапку
-    ['%',
-        'O0001(BOLT/VINT UNI - HD1)',
-        '#1=0(0-KR,1-SK)',
-        '#2=10.0(RAZMER ZAGOTOVKI)',
-        '#530=0(DLINA DETALI)',
-        '#103=20.0(DL DO GOLOVI)',
-        '#6=1(SHLIC)',
-        '#104=2.8(DLINA GOLOVY)',
-        '#119=8.05(DIAMETR BYRTA)',
-        '#130=0.3(R PR BURTA)',
-        '#135=90.0(NAKLON GOLOVY/YGOL FASKI NA SK)',
-        '',
-        '#32=0.1(OTKLONENIE OT DIAMETRA REZBY DLIA PROTOCHKI)',
-        '#501=0.2(RADIUS PROHODNOI PLASTINY)',
-        '#502=4(NAPRAVLENIE VRASHENIA M3/M4)',
-        '#503=20.0(SKOROST REZANIA DLIA PROHODNOGO)',
-        '#505=0.02(PODACHA DLIA PROHODNOGO)',
-        '#529=1500(OBOROTY NA OTREZKE)',
-        '#510=3.0(SHIRINA OTREZNOGO)',
-        '#511=0.03(PODACHA NA OTREZKE)',
-        '#509=0(PRIPUSK NA HEAD-2)',
-        '#528=1.0(OTREZAT DO X-)',
-        '#508=11.0(15.0+++)(OVER-TRAVEL Z1)',
-        '#531=0(DLINA DETALI)'
-    ];
+let standart = {//стандартные перменные, будут вставляться всегда в шапку
+    //standart['#1'].value
+    name: 'O0001(BOLT/VINT UNI - HD1)',
+    '#1': {
+        value: 0,
+        comment: '(0-KR,1-SK)'
+    },
+    '#2': {
+        value: 10.0,
+        comment: '(RAZMER ZAGOTOVKI)'
+    },
+    '#530': {
+        value: 0,
+        comment: '(DLINA DETALI)'
+    },
+    '#103': {
+        value: 20.0,
+        comment: '(DL DO GOLOVI)'
+    },
+    '#104': {
+        value: 2.8,
+        comment: '(DLINA GOLOVY)'
+    },
+    '#119': {
+        value: 8.05,
+        comment: '(DIAMETR BYRTA)'
+    },
+    '#130': {
+        value: 0.3,
+        comment: '(R PR BURTA)'
+    },
+    '#135': {
+        value: 90.0,
+        comment: '(NAKLON GOLOVY / YGOL FASKI NA SK)'
+    },
+    '#32': {
+        value: 0.1,
+        comment: '(OTKLONENIE OT DIAMETRA REZBY DLIA PROTOCHKI)'
+    },
+    '#501': {
+        value: 0.2,
+        comment: '(RADIUS PROHODNOI PLASTINY)'
+    },
+    '#502': {
+        value: 4,
+        comment: '(NAPRAVLENIE VRASHENIA M3 / M4)'
+    },
+    '#503': {
+        value: 20,
+        comment: '(SKOROST REZANIA DLIA PROHODNOGO)'
+    },
+    '#505': {
+        value: 0.02,
+        comment: '(PODACHA DLIA PROHODNOGO)'
+    },
+    '#529': {
+        value: 1500,
+        comment: '(OBOROTY NA OTREZKE)'
+    },
+    '#510': {
+        value: 3.0,
+        comment: '(SHIRINA OTREZNOGO)'
+    },
+    '#511': {
+        value: 0.03,
+        comment: '(PODACHA NA OTREZKE)'
+    },
+    '#509': {
+        value: 0,
+        comment: '(PRIPUSK NA HEAD - 2)'
+    },
+    '#528': {
+        value: 1.0,
+        comment: '(OTREZAT DO X -)'
+    },
+    '#508': {
+        value: 11.0,
+        comment: '(15.0++ +)(OVER - TRAVEL Z1)'
+    },
+    '#531': {
+        value: 0,
+        comment: '(DLINA DETALI)'
+    },
+};
 
 // IF[#530EQ0]THEN#530=[#103+#104](DLINA DETALI)
 // IF[#106EQ0]THEN#106=[#530-#104](DLINA T,L0)

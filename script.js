@@ -1,7 +1,7 @@
 let textArea = document.getElementById('textArea');
 let textVariables = document.getElementById('textVariables');
 let divWithBtn = document.getElementById('divWithBtn');
-
+let divBlocks = document.getElementsByClassName('divBlocks')[0];
 let goEgit = {
     start: 0,
     blocks: 0,
@@ -16,8 +16,8 @@ let goEgit = {
             btnSave.onclick = this.generateProg;
             divWithBtn.append(btnSave);
         };
-        generateStandartVar();
-
+        //generateStandartVar();
+        divBlocks.append(createHeadBlock());
     },
     generateProg() { //склеиваем собранную прогрмамму в массив, и выводим в файл
         existProg[0] = textVariables.value;
@@ -35,7 +35,7 @@ let goEgit = {
 */
 function generateStandartVar() {
     for (let variables of standart) {
-        textVariables.value += variables + '\n';
+        textArea.value += variables + '\n';
     }
 }
 
@@ -60,9 +60,9 @@ function generateBtn() {
 function btnDo(e) {
     let textArea = document.getElementById('textArea');
     let textVariables = document.getElementById('textVariables');
-    let divBlocks = document.getElementsByClassName('divBlocks')[0];
-    textArea.value += strToText(e.target.id, 'code');
-    textVariables.value += strToText(e.target.id, 'variables');
+
+    //textArea.value += strToText(e.target.id, 'code');
+    //textVariables.value += strToText(e.target.id, 'variables');
     divBlocks.append(createBlock(e.target.id, 'code'));
 };
 
@@ -76,21 +76,49 @@ function strToText(n, type) {
     let arr = blocks[n][type].split(';');
     return arr.join('\n');
 }
+function createHeadBlock() {
+    let fragment = new DocumentFragment();
 
+    let div = document.createElement("div");
+    div.classList.add('block'),
+        div.classList.add('head'),
+        br = document.createElement('br');
+    for (let variables in standart) {
+        let span = document.createElement('span');
+        let input = document.createElement('input');
+        input.type = 'text';
+        input.classList.add('inputVar');
+        if (variables == "name") {
+            span.innerHTML = 'Название программы';
+            input.value = variables;
+        } else {
+            span.innerHTML = standart[variables].comment;
+            input.value = standart[variables].value;
+        }
+        div.append(span, input, br);
+
+
+    }
+    fragment.append(div);
+    return fragment;
+
+}
 function createBlock(n, type) {
     let fragment = new DocumentFragment(),
         p = document.createElement('p'),
         span = document.createElement("span"),
         textArea = document.createElement("textarea"),
         div = document.createElement("div");
+
     goEgit.blocks++;
     div.id = n + 'Block' + goEgit.blocks;
     div.classList.add('block');
     textArea.classList.add('BlockTextArea');
+
     p.innerText = blocks[n].item;
     textArea.value = strToText(n, type);
+
     div.append(p, textArea);
     fragment.append(div);
-
     return fragment;
 }
