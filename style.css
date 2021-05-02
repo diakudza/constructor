@@ -9,40 +9,60 @@
     padding: 20px;
 }
 
-
 #divWithBtn {
-    width: 15%;
+    width: 150px;
     display: flex;
     flex-direction: column;
-    
-    justify-content: center;
-}
+    }
 .divBlocks {
     padding: 0 0 0 20px;
-    height: 100%;
-    width: 75%;
+    justify-content: space-evenly;
     flex-direction: row;
     flex-wrap: wrap;
     display: flex;
-
+    align-content: flex-start;
 }
 .block{
     border: 1px solid black;
     border-radius: 10px;
     width: 200px;
-    height: 200px;
+    height: 50px;
     padding: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
+    margin: 0 10px 10px 0;
 }
+
 .head {
-    width: 300px;
-    height: auto;
+    width: 100px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    font-size: 14px;
+    
+}
+
+.block:hover > .divLayout{
+    display: block;
+    min-height: 300px;
+    width: 400px;
+    padding: 15px;
+    border: 1px solid saddlebrown ;
+    border-radius: 10px;
+    top: -5px;
+    background: white;
+    
+}
+.divLayout {
+    display: none;
+    z-index: 10;
+    position: absolute;
+    overflow: hidden;
+}
+.head span{
+    width: auto;
 }
 .block::after {
     content: "→";
@@ -50,12 +70,18 @@
     right: -9px;
     top:40%;
     font-size: large;
-  }
+}
+.divWrap {
+    display: flex;
+   /* white-space: nowrap;*/
+
+}
 .inputVar{
     width: 30px;
 }
 .BlockTextArea{
     width: 100%;
+    height: 60vh;
     resize: none;
     border-radius: 5px;
 }
@@ -66,9 +92,10 @@
     }
 #save {
     display: flex;
+    box-sizing: border-box;
     align-items: center;
     justify-content: center;
-    width: 150px;
+    width: 100%;
     height: 40px;
     background:cadetblue;
     text-decoration: none;
@@ -84,3 +111,4 @@
     resize: none;
     height: 30%;
 }
+

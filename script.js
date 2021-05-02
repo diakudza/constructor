@@ -16,8 +16,9 @@ let goEgit = {
             btnSave.onclick = this.generateProg;
             divWithBtn.append(btnSave);
         };
-        //generateStandartVar();
+
         divBlocks.append(createHeadBlock());
+        divBlocks.append(createBlock('standart', 'code', 'head'));
     },
     generateProg() { //склеиваем собранную прогрмамму в массив, и выводим в файл
         existProg[0] = textVariables.value;
@@ -28,17 +29,27 @@ let goEgit = {
     },
     removeBlock(e) {
 
+    },
+    addHeadVar(va, value, comment) {
+        if (document.getElementById('divWrap' + va)) {
+            return;
+        }
+        let span = document.createElement('span');
+        let input = document.createElement('input');
+        let divWrap = document.createElement("div");
+        let spanVar = document.createElement('span');
+        divWrap.classList.add('divWrap');
+        divWrap.id = 'divWrap' + va;
+        input.type = 'text';
+        spanVar.innerHTML = va;
+        input.value = value;
+        span.innerHTML = comment;
+        input.classList.add('inputVar');
+        let div = document.getElementById('headLayout');
+        divWrap.append(spanVar, input, span);
+        div.append(divWrap);
     }
 }
-/**
-* Функция генерирует шапку программы со стандартными переменными
-*/
-function generateStandartVar() {
-    for (let variables of standart) {
-        textArea.value += variables + '\n';
-    }
-}
-
 
 /**
 * Функция смотрит, какие есть операции в объекте и генерирует кнопки
@@ -60,10 +71,8 @@ function generateBtn() {
 function btnDo(e) {
     let textArea = document.getElementById('textArea');
     let textVariables = document.getElementById('textVariables');
-
-    //textArea.value += strToText(e.target.id, 'code');
-    //textVariables.value += strToText(e.target.id, 'variables');
     divBlocks.append(createBlock(e.target.id, 'code'));
+
 };
 
 
@@ -78,47 +87,70 @@ function strToText(n, type) {
 }
 function createHeadBlock() {
     let fragment = new DocumentFragment();
-
+    let divLayout = document.createElement("div");
     let div = document.createElement("div");
-    div.classList.add('block'),
-        div.classList.add('head'),
-        br = document.createElement('br');
+    let title = document.createElement('span');
+    title.innerHTML = 'HEAD1';
+    div.classList.add('block', 'head');
+    divLayout.classList.add('divLayout');
+    divLayout.id = 'headLayout';
     for (let variables in standart) {
         let span = document.createElement('span');
         let input = document.createElement('input');
+        let divWrap = document.createElement("div");
+        let spanVar = document.createElement('span');
+        divWrap.classList.add('divWrap');
+        divWrap.id = 'divWrap' + variables;
         input.type = 'text';
         input.classList.add('inputVar');
         if (variables == "name") {
-            span.innerHTML = 'Название программы';
-            input.value = variables;
+            spanVar = '';
+            span.innerHTML = 'Name';
+            input.value = standart.name;
+            input.style = 'width:250px;';
         } else {
+            spanVar.innerText = variables;
+            spanVar.style = 'width:25px;';
             span.innerHTML = standart[variables].comment;
             input.value = standart[variables].value;
         }
-        div.append(span, input, br);
-
+        divWrap.append(spanVar, input, span)
+        divLayout.append(divWrap);
 
     }
+    div.append(title, divLayout);
     fragment.append(div);
     return fragment;
-
 }
-function createBlock(n, type) {
+
+function createBlock(n, type, classBlock = "block") {
     let fragment = new DocumentFragment(),
         p = document.createElement('p'),
         span = document.createElement("span"),
         textArea = document.createElement("textarea"),
-        div = document.createElement("div");
-
+        divWrapBlock = document.createElement("div"),
+        btn = document.createElement('button');
+    div = document.createElement("div");
     goEgit.blocks++;
-    div.id = n + 'Block' + goEgit.blocks;
-    div.classList.add('block');
+    divWrapBlock.id = n + 'Block' + goEgit.blocks;
+    divWrapBlock.classList.add('block');
+    divWrapBlock.classList.add(classBlock);
     textArea.classList.add('BlockTextArea');
-
+    btn.onclick = removeBlock;
+    btn.innerHTML = 'Удалить';
     p.innerText = blocks[n].item;
     textArea.value = strToText(n, type);
-
-    div.append(p, textArea);
-    fragment.append(div);
+    div.classList.add('divLayout');
+    div.append(p, textArea, btn);
+    divWrapBlock.append(p, div);
+    for (variable in blocks[n].variables) {
+        goEgit.addHeadVar(variable, blocks[n].variables[variable].value, blocks[n].variables[variable].comment);
+    }
+    fragment.append(divWrapBlock);
     return fragment;
+}
+
+function removeBlock(e) {
+    let block = e.target.parentNode;
+    block.parentNode.remove();
 }
