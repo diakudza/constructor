@@ -2,11 +2,14 @@
     margin: 0;
     padding: 0;
 }
+body {
+    background: #333;
+}
 .main {
     display: flex;
     flex-direction: row;
-    height: 900px;
     padding: 20px;
+    width: 100%;
 }
 
 #divWithBtn {
@@ -16,14 +19,16 @@
     }
 .divBlocks {
     padding: 0 0 0 20px;
-    justify-content: space-evenly;
+    /*justify-content: space-evenly;*/
+    width: 80%;
     flex-direction: row;
     flex-wrap: wrap;
     display: flex;
     align-content: flex-start;
 }
 .block{
-    border: 1px solid black;
+    
+    background: white;
     border-radius: 10px;
     width: 200px;
     height: 50px;
@@ -33,7 +38,9 @@
     align-items: center;
     position: relative;
     margin: 0 10px 10px 0;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
+
 
 .head {
     width: 100px;
@@ -49,10 +56,11 @@
     min-height: 300px;
     width: 400px;
     padding: 15px;
-    border: 1px solid saddlebrown ;
+    
     border-radius: 10px;
     top: -5px;
     background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
     
 }
 .divLayout {
@@ -60,6 +68,7 @@
     z-index: 10;
     position: absolute;
     overflow: hidden;
+    
 }
 .head span{
     width: auto;
@@ -67,9 +76,13 @@
 .block::after {
     content: "→";
     position: absolute;
-    right: -9px;
-    top:40%;
+    color: wheat;
+    right: -12px;
+    top:35%;
     font-size: large;
+}
+.end::after{
+    content: none;
 }
 .divWrap {
     display: flex;
@@ -88,7 +101,7 @@
 #divWithBtn button {
     width: 100%;
     height: 40px;
-    background:cadetblue;
+    background:white;
     }
 #save {
     display: flex;

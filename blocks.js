@@ -82,9 +82,10 @@ let blocks = {
     frezSk: {
         item: "Фрезеровка ШК",
         variables: {
-            "#3": { value: 7.0, comment: '(FREZ SK)(0-NE FREZ)' },
-            code: "N32(FREZEROVKA SK);T3200;M5;M8;M36S2000;G28H0.0;G0C14.0;G50C0;G0X#3Y[#531+6.0]Z[#103+2.5]C0.0T32;#29=3.0;WHILE[#29LE360.0]DO1;#29=#29+60.0;G0C#29;M6;G1X[#3-0.1]F0.2;G1Y-[#3*1.155+5.0]F0.03;G0Y[#3*1.155+5.0];G0X#531;M7;END1;G0G99X#531;M68;G0X60.0Z-1.0;M69;G18;M9;M38;G0T0;M1; ;"
-        }
+            "#3": { value: 7.0, comment: '(FREZ SK)(0-NE FREZ)' }
+        },
+        code: "N32(FREZEROVKA SK);T3200;M5;M8;M36S2000;G28H0.0;G0C14.0;G50C0;G0X#3Y[#531+6.0]Z[#103+2.5]C0.0T32;#29=3.0;WHILE[#29LE360.0]DO1;#29=#29+60.0;G0C#29;M6;G1X[#3-0.1]F0.2;G1Y-[#3*1.155+5.0]F0.03;G0Y[#3*1.155+5.0];G0X#531;M7;END1;G0G99X#531;M68;G0X60.0Z-1.0;M69;G18;M9;M38;G0T0;M1; ;"
+
     },
     protochkaDoGoloviSK: {
         item: "Проточка до головы ШК",
@@ -114,9 +115,5 @@ let blocks = {
 
 }
 
-let existProg = ['',
-    '',
-    '',
-    ''
-];//собранный массив с готовой программой
+let existProg = ['%\n', ''];//собранный массив с готовой программой
 

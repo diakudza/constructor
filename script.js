@@ -21,14 +21,16 @@ let goEgit = {
         divBlocks.append(createBlock('standart', 'code', 'head'));
     },
     generateProg() { //склеиваем собранную прогрмамму в массив, и выводим в файл
-        existProg[0] = textVariables.value;
-        existProg[2] = textArea.value;
-        let myData = 'data:application/txt;charset=utf-8,' + encodeURIComponent(existProg[0] + existProg[1].split(';').join('\n') + existProg[2] + existProg[3].split(';').join('\n'));
+        existProg[0] = '', existProg[1] = '';
+        getExistHead();
+        getBlockText();
+        let myData = 'data:application/txt;charset=utf-8,' + encodeURIComponent(existProg[0] + existProg[1].split(';').join('\n'));
         this.href = myData;
         this.download = 'O0020.txt';
     },
     removeBlock(e) {
-
+        let block = e.target.parentNode;
+        block.parentNode.remove();
     },
     addHeadVar(va, value, comment) {
         if (document.getElementById('divWrap' + va)) {
@@ -44,6 +46,7 @@ let goEgit = {
         spanVar.innerHTML = va;
         input.value = value;
         span.innerHTML = comment;
+        input.name = va;
         input.classList.add('inputVar');
         let div = document.getElementById('headLayout');
         divWrap.append(spanVar, input, span);
@@ -56,6 +59,9 @@ let goEgit = {
 */
 function generateBtn() {
     for (let oper in blocks) {
+        if (oper == 'standart') {
+            continue;
+        }
         let btn = document.createElement('button');
         btn.id = oper
         btn.innerText = blocks[oper].item;
@@ -71,8 +77,11 @@ function generateBtn() {
 function btnDo(e) {
     let textArea = document.getElementById('textArea');
     let textVariables = document.getElementById('textVariables');
-    divBlocks.append(createBlock(e.target.id, 'code'));
-
+    if (e.target.id == 'cut') {
+        divBlocks.append(createBlock(e.target.id, 'code', 'end'));
+    } else {
+        divBlocks.append(createBlock(e.target.id, 'code'));
+    }
 };
 
 
@@ -91,6 +100,7 @@ function createHeadBlock() {
     let div = document.createElement("div");
     let title = document.createElement('span');
     title.innerHTML = 'HEAD1';
+    div.id = 'head';
     div.classList.add('block', 'head');
     divLayout.classList.add('divLayout');
     divLayout.id = 'headLayout';
@@ -102,6 +112,7 @@ function createHeadBlock() {
         divWrap.classList.add('divWrap');
         divWrap.id = 'divWrap' + variables;
         input.type = 'text';
+        input.name = variables;
         input.classList.add('inputVar');
         if (variables == "name") {
             spanVar = '';
@@ -136,12 +147,12 @@ function createBlock(n, type, classBlock = "block") {
     divWrapBlock.classList.add('block');
     divWrapBlock.classList.add(classBlock);
     textArea.classList.add('BlockTextArea');
-    btn.onclick = removeBlock;
+    btn.onclick = goEgit.removeBlock;
     btn.innerHTML = 'Удалить';
     p.innerText = blocks[n].item;
     textArea.value = strToText(n, type);
     div.classList.add('divLayout');
-    div.append(p, textArea, btn);
+    div.append(btn, p, textArea);
     divWrapBlock.append(p, div);
     for (variable in blocks[n].variables) {
         goEgit.addHeadVar(variable, blocks[n].variables[variable].value, blocks[n].variables[variable].comment);
@@ -150,7 +161,19 @@ function createBlock(n, type, classBlock = "block") {
     return fragment;
 }
 
-function removeBlock(e) {
-    let block = e.target.parentNode;
-    block.parentNode.remove();
+function getExistHead() {
+    let arrOfVar = document.querySelectorAll('#headLayout > div');
+    for (item of arrOfVar) {
+        if (item.childNodes[1].name == 'name') {
+            existProg[0] += `${item.childNodes[1].value}\n`;
+            continue;
+        }
+        existProg[0] += `${item.childNodes[1].name}=${item.childNodes[1].value}${item.childNodes[2].innerHTML}\n`;
+    }
+}
+function getBlockText() {
+    let div = document.querySelectorAll('form > div:not(#head)');
+    for (item of div) {
+        existProg[1] += `${item.childNodes[1].childNodes[1].value}`;
+    }
 }
