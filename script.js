@@ -5,6 +5,7 @@ let divBlocks = document.getElementsByClassName('divBlocks')[0];
 let goEgit = {
     start: 0,
     blocks: 0,
+    hasCut: 0,
     generate() { //метод запуска рендера кнопок и шапки 
         if (goEgit.start === 0) {
             this.start = 1;
@@ -30,6 +31,11 @@ let goEgit = {
     },
     removeBlock(e) {
         let block = e.target.parentNode;
+        // let a = e.target.parentNode.parentNode.id;
+        // a = a.substr(3);
+        // if (e.target.parentNode.parentNode.id.substr(3) == 'cut') {
+        //     goEgit.hasCut = 0;
+        // }
         block.parentNode.remove();
     },
     addHeadVar(va, value, comment) {
@@ -75,10 +81,19 @@ function generateBtn() {
 * Функция добавляет текст в поля textArea и textVariables
 */
 function btnDo(e) {
+    if (goEgit.hasCut == 1) {
+        alert('После отрезки блоки добавлять нельзя!');
+        return;
+    }
     let textArea = document.getElementById('textArea');
     let textVariables = document.getElementById('textVariables');
     if (e.target.id == 'cut') {
-        divBlocks.append(createBlock(e.target.id, 'code', 'end'));
+        if (goEgit.hasCut !== 1) {
+            goEgit.hasCut = 1;
+            divBlocks.append(createBlock(e.target.id, 'code', 'end'));
+        } else {
+            alert('Вы уже добавил отрезку!');
+        }
     } else {
         divBlocks.append(createBlock(e.target.id, 'code'));
     }
