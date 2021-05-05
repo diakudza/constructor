@@ -23,6 +23,7 @@ let goEgit = {
     },
     generateProg() { //склеиваем собранную прогрмамму в массив, и выводим в файл
         existProg[0] = '', existProg[1] = '';
+        dlinaDetail();
         getExistHead();
         getBlockText();
         let myData = 'data:application/txt;charset=utf-8,' + encodeURIComponent(existProg[0] + existProg[1].split(';').join('\n'));
@@ -74,7 +75,20 @@ function generateBtn() {
     }
 }
 
-
+/**
+* Функция устанавливает переменную #531
+*/
+function dlinaDetail() {
+    let typeM = document.getElementById('divWrap#1');
+    let diam = document.getElementById('divWrap#2');
+    let dlina = document.getElementById('divWrap#531');
+    // let razmerZag = typeM.children[1].value;
+    if (typeM.children[1].value == "1") {
+        dlina.children[1].value = diam.children[1].value * 1.155 + 1.0;
+    } else {
+        dlina.children[1].value = +diam.children[1].value + 1.0;
+    }
+}
 /**
 * Функция добавляет текст в поля textArea и textVariables
 */

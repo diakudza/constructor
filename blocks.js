@@ -4,11 +4,11 @@ let standart = {//стандартные перменные, будут вста
     '#1': { value: 0, comment: '(0-KR,1-SK)' },
     '#2': { value: 10.0, comment: '(RAZMER ZAGOTOVKI)' },
     '#530': { value: 0, comment: '(DLINA DETALI)' },
-    '#103': { value: 20.0, comment: '(DL DO GOLOVI)' },
-    '#104': { value: 2.8, comment: '(DLINA GOLOVY)' },
-    '#119': { value: 8.05, comment: '(DIAMETR BYRTA)' },
-    '#130': { value: 0.3, comment: '(R PR BURTA)' },
-    '#135': { value: 90.0, comment: '(NAKLON GOLOVY / YGOL FASKI NA SK)' },
+    // '#103': { value: 20.0, comment: '(DL DO GOLOVI)' },
+    // '#104': { value: 2.8, comment: '(DLINA GOLOVY)' },
+    // '#119': { value: 8.05, comment: '(DIAMETR BYRTA)' },
+    // '#130': { value: 0.3, comment: '(R PR BURTA)' },
+    // '#135': { value: 90.0, comment: '(NAKLON GOLOVY / YGOL FASKI NA SK)' },
     '#501': { value: 0.2, comment: '(RADIUS PROHODNOI PLASTINY)' },
     '#502': { value: 4, comment: '(NAPRAVLENIE VRASHENIA M3 / M4)' },
     '#503': { value: 20, comment: '(SKOROST REZANIA DLIA PROHODNOGO)' },
@@ -19,7 +19,7 @@ let standart = {//стандартные перменные, будут вста
     '#509': { value: 0, comment: '(PRIPUSK NA HEAD - 2)' },
     '#528': { value: 1.0, comment: '(OTREZAT DO X -)' },
     '#508': { value: 11.0, comment: '(15.0++ +)(OVER - TRAVEL Z1)' },
-    '#531': { value: 0, comment: '(DLINA DETALI)' },
+    '#531': { value: 0, comment: '(DIAM ZAGOTOVKI+1mm)' },
 };
 
 // IF[#530EQ0]THEN#530=[#103+#104](DLINA DETALI)
@@ -48,13 +48,18 @@ let blocks = {
         code: "N301(TORCEVANIE);G10P3Q4R#501;T300;G97S1300M#502;G1G99X#531Z-1.0F1.0T3;G42G1U-1.0Z0.0F0.03;G1X-[#501*2.0]F0.04;G40G1W-1.0F0.2;M68;G0X60.0W-1.0;M69;G0T0;M1; ;"
     },
     protichkaPodRezbu: {
-        item: "Проточка под резьбу болт",
+        item: "Проточка",
         variables: {
             '#111': { value: 0.8, comment: '(DLINA FASKI POD REZBY)' },
             '#32': { value: 0.1, comment: '(OTKLONENIE OT DIAMETRA REZBY DLIA PROTOCHKI)' },
             '#108': { value: 3.93, comment: '(DIAMETR GLADKOI CASTI)' }
         },
-        code: "N315;G10P3Q4R#501;T300(PROTOCHKA POD REZBY NA STANKE, BOLT);G96S#503M#502;M68;G0G99X#531Z-1.0T3;M69;M161;G42G1U-0.9Z0.0F0.05;G1X-#501F#505;G96S#503;G41G1X[[#107-#32]-#111*2.0];G1U[#111*2.0]W#111F[#505/2.0];G1Z[#106-ROUND[[#108-#129]*0.866]-ROUND[[#107 -#32-#129]*0.866]]F#505;G1Z[#106-ROUND[[#108-#129]*0.866]]X#129;G1Z#106X#108;G1X#531F0.05;M68;G0Z-2.0(Z-5.0);G0X60.0;G40;M69;M171;G0T0;M1; ;"
+        code: {
+            start: "N315;G10P3Q4R#501;T300(PROTOCHKA);G96S#503M#502;M68;G0G99X#531Z-1.0T3;M69;M161;G42G1U-0.9Z0.0F0.05;G1X-#501F#505;G96S#503;",
+            '1': 'G41G1X[[#107-#32]-#111*2.0];G1U[#111*2.0]W#111F[#505/2.0];G1Z[#106-ROUND[[#108-#129]*0.866]-ROUND[[#107 -#32-#129]*0.866]]F#505;G1Z[#106-ROUND[[#108-#129]*0.866]]X#129;G1Z#106X#108;',
+            end: 'G1X#531F0.05;M68;G0Z-2.0(Z-5.0);G0X60.0;G40;M69;M171;G0T0;M1; ;'
+        }
+
 
     },
 
