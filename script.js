@@ -31,11 +31,9 @@ let goEgit = {
     },
     removeBlock(e) {
         let block = e.target.parentNode;
-        // let a = e.target.parentNode.parentNode.id;
-        // a = a.substr(3);
-        // if (e.target.parentNode.parentNode.id.substr(3) == 'cut') {
-        //     goEgit.hasCut = 0;
-        // }
+        if (e.target.parentNode.parentNode.id.substr(0, 3) == 'cut') {
+            goEgit.hasCut = 0;
+        }
         block.parentNode.remove();
     },
     addHeadVar(va, value, comment) {
@@ -136,7 +134,7 @@ function createHeadBlock() {
             input.style = 'width:250px;';
         } else {
             spanVar.innerText = variables;
-            spanVar.style = 'width:25px;';
+            spanVar.style = 'width:30px;';
             span.innerHTML = standart[variables].comment;
             input.value = standart[variables].value;
         }

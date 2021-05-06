@@ -1,5 +1,5 @@
 let standart = {//стандартные перменные, будут вставляться всегда в шапку
-    //standart['#1'].value
+
     name: 'O0001(BOLT/VINT UNI - HD1)',
     '#1': { value: 0, comment: '(0-KR,1-SK)' },
     '#2': { value: 10.0, comment: '(RAZMER ZAGOTOVKI)' },
@@ -9,7 +9,6 @@ let standart = {//стандартные перменные, будут вста
     '#119': { value: 8.05, comment: '(DIAMETR BYRTA)' },
     '#130': { value: 0.3, comment: '(R PR BURTA)' },
     '#135': { value: 90.0, comment: '(NAKLON GOLOVY / YGOL FASKI NA SK)' },
-    '#32': { value: 0.1, comment: '(OTKLONENIE OT DIAMETRA REZBY DLIA PROTOCHKI)' },
     '#501': { value: 0.2, comment: '(RADIUS PROHODNOI PLASTINY)' },
     '#502': { value: 4, comment: '(NAPRAVLENIE VRASHENIA M3 / M4)' },
     '#503': { value: 20, comment: '(SKOROST REZANIA DLIA PROHODNOGO)' },
