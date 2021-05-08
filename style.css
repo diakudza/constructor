@@ -52,11 +52,11 @@ body {
 }
 
 .block:hover > .divLayout{
-    display: block;
+    display: flex;
     min-height: 300px;
     width: 400px;
     padding: 15px;
-    
+    flex-direction: column;
     border-radius: 10px;
     top: -5px;
     background: white;
@@ -65,10 +65,23 @@ body {
 }
 .divLayout {
     display: none;
+
     z-index: 10;
     position: absolute;
     overflow: hidden;
     
+}
+.btnClose{
+    width: 22px;
+}
+.buttonsWrap{
+    display: flex;
+}
+.buttonsProtochka{
+    
+}
+#protochkaMiddleText{
+    height: 500px;
 }
 .head span{
     width: auto;

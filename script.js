@@ -2,11 +2,13 @@ let textArea = document.getElementById('textArea');
 let textVariables = document.getElementById('textVariables');
 let divWithBtn = document.getElementById('divWithBtn');
 let divBlocks = document.getElementsByClassName('divBlocks')[0];
+
 let goEgit = {
     start: 0,
     blocks: 0,
     hasCut: 0,
-    generate() { //метод запуска рендера кнопок и шапки 
+    /**метод запуска рендера кнопок и шапки */
+    generate() {
         if (goEgit.start === 0) {
             this.start = 1;
             generateBtn();
@@ -21,7 +23,8 @@ let goEgit = {
         divBlocks.append(createHeadBlock());
         divBlocks.append(createBlock('standart', 'code', 'head'));
     },
-    generateProg() { //склеиваем собранную прогрмамму в массив, и выводим в файл
+    /** склеиваем собранную прогрмамму в массив, и выводим в файл */
+    generateProg() {
         existProg[0] = '', existProg[1] = '';
         dlinaDetail();
         getExistHead();
@@ -30,13 +33,20 @@ let goEgit = {
         this.href = myData;
         this.download = 'O0020.txt';
     },
+    /** удаляет выбранный блок */
     removeBlock(e) {
         let block = e.target.parentNode;
         if (e.target.parentNode.parentNode.id.substr(0, 3) == 'cut') {
             goEgit.hasCut = 0;
         }
+        let oper = e.target.parentNode.parentNode.dataset.name;
+
         block.parentNode.remove();
+        //надо удалить переменные из шапки..
+
+
     },
+    /** добавляет переменные из блока в шапку */
     addHeadVar(va, value, comment) {
         if (document.getElementById('divWrap' + va)) {
             return;
@@ -59,9 +69,7 @@ let goEgit = {
     }
 }
 
-/**
-* Функция смотрит, какие есть операции в объекте и генерирует кнопки
-*/
+/**Функция смотрит, какие есть операции в объекте и генерирует кнопки*/
 function generateBtn() {
     for (let oper in blocks) {
         if (oper == 'standart') {
@@ -75,9 +83,7 @@ function generateBtn() {
     }
 }
 
-/**
-* Функция устанавливает переменную #531
-*/
+/**Функция устанавливает переменную #531*/
 function dlinaDetail() {
     let typeM = document.getElementById('divWrap#1');
     let diam = document.getElementById('divWrap#2');
@@ -110,10 +116,15 @@ function btnDo(e) {
         divBlocks.append(createBlock(e.target.id, 'code'));
     }
 };
+/** Функция вешает действия на кнопки в блоке "Проточка" */
+function btnProtochka(e) {
+    let middleText = document.getElementById('protochkaMiddleText');
 
+    middleText.value += blocks.protochka.code[e.target.dataset.kont].code.split(';').join('\n');
+}
 
 /**
-* Функция получает свойсво обекта bloks[n] , делает из строки массив, возращает строку с переводом строки 
+* Функция получает свойсво обекта blocks[n] , делает из строки массив, возращает строку с переводом строки 
 *@param n {blocks[n]} операция в обекте
 *@param type { item|variable|code } выбор свойства операции
 */
@@ -121,6 +132,8 @@ function strToText(n, type) {
     let arr = blocks[n][type].split(';');
     return arr.join('\n');
 }
+
+/** Функция создает первый блок (шапку программы) */
 function createHeadBlock() {
     let fragment = new DocumentFragment();
     let divLayout = document.createElement("div");
@@ -142,8 +155,8 @@ function createHeadBlock() {
         input.name = variables;
         input.classList.add('inputVar');
         if (variables == "name") {
-            spanVar = '';
-            span.innerHTML = 'Name';
+            spanVar.innerHTML = 'Name';
+            span = '';
             input.value = standart.name;
             input.style = 'width:250px;';
         } else {
@@ -161,6 +174,29 @@ function createHeadBlock() {
     return fragment;
 }
 
+/** Выводим кнопки с возможными операциями для проточки */
+function createBtnForProtochka() {
+
+    let div = document.createElement('div');
+    div.classList.add('buttonsWrap');
+    for (kontur in blocks.protochka.code) {
+        if (kontur == 'start' || kontur == 'end') { continue; }
+        let btn = document.createElement('button');
+        btn.innerHTML = blocks.protochka.code[kontur].title;
+        btn.dataset.kont = blocks.protochka.code[kontur].id;
+        btn.onclick = btnProtochka;
+        btn.classList.add('buttonsProtochka');
+        div.append(btn);
+
+    }
+    return div;
+}
+
+/** Функция создает блок с операцией 
+*@param n {blocks[n]} операция в обекте
+*@param type { item|variable|} выбор свойства операции
+*@param classBlock {задаем класс для создаваемого блока }
+*/
 function createBlock(n, type, classBlock = "block") {
     let fragment = new DocumentFragment(),
         p = document.createElement('p'),
@@ -172,14 +208,34 @@ function createBlock(n, type, classBlock = "block") {
     goEgit.blocks++;
     divWrapBlock.id = n + 'Block' + goEgit.blocks;
     divWrapBlock.classList.add('block');
+    divWrapBlock.dataset.name = n;
     divWrapBlock.classList.add(classBlock);
     textArea.classList.add('BlockTextArea');
     btn.onclick = goEgit.removeBlock;
-    btn.innerHTML = 'Удалить';
-    p.innerText = blocks[n].item;
-    textArea.value = strToText(n, type);
+    btn.classList.add('btnClose');
+    btn.innerHTML = '&#10060;';
     div.classList.add('divLayout');
-    div.append(btn, p, textArea);
+    p.innerText = blocks[n].item;
+    if (n == 'protochka') {
+        let startBlock = document.createElement('textarea');
+        let middleBlock = document.createElement('textarea');
+        let endBlock = document.createElement('textarea');
+        middleBlock.id = 'protochkaMiddleText';
+        startBlock.value = blocks[n].code.start.split(';').join('\n');
+        middleBlock.value = '';//blocks[n].code['1'].split(';').join('\n');
+        endBlock.value = blocks[n].code.end.split(';').join('\n');
+        div.append(btn, p, startBlock, createBtnForProtochka(), middleBlock, endBlock);
+        divWrapBlock.append(p, div);
+        fragment.append(divWrapBlock);
+        return fragment;
+    }
+    textArea.value = strToText(n, type);
+    if (n == 'standart') {
+        div.append(p, textArea);
+    } else {
+        div.append(btn, p, textArea);
+    }
+
     divWrapBlock.append(p, div);
     for (variable in blocks[n].variables) {
         goEgit.addHeadVar(variable, blocks[n].variables[variable].value, blocks[n].variables[variable].comment);
@@ -187,7 +243,7 @@ function createBlock(n, type, classBlock = "block") {
     fragment.append(divWrapBlock);
     return fragment;
 }
-
+/** читаем все изменения в шапке и пишем их в конечный массив */
 function getExistHead() {
     let arrOfVar = document.querySelectorAll('#headLayout > div');
     for (item of arrOfVar) {
@@ -198,9 +254,12 @@ function getExistHead() {
         existProg[0] += `${item.childNodes[1].name}=${item.childNodes[1].value}${item.childNodes[2].innerHTML}\n`;
     }
 }
+
+/** Функция читает все текстовые поля в блоках и пишет все в массив */
 function getBlockText() {
     let div = document.querySelectorAll('form > div:not(#head)');
     for (item of div) {
         existProg[1] += `${item.childNodes[1].childNodes[1].value}`;
     }
 }
+
