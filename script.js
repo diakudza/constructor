@@ -1,5 +1,5 @@
-let textArea = document.getElementById('textArea');
-let textVariables = document.getElementById('textVariables');
+//let textArea = document.getElementById('textArea');
+//let textVariables = document.getElementById('textVariables');
 let divWithBtn = document.getElementById('divWithBtn');
 let divBlocks = document.getElementsByClassName('divBlocks')[0];
 class Oper {
@@ -15,11 +15,11 @@ class Oper {
         console.log(this.item.code);
     }
     createBlock(item = this.item, code = this.code, classBlock = "block") {
-        if (gO.hasCut == 1) {
+        if (gO.hasCut === 1) {
             alert('Вы уже добавил отрезку!');
             return;
         }
-        if (item == 'cut') {
+        if (item === 'cut') {
             if (gO.hasCut !== 1) {
                 gO.hasCut = 1;
                 classBlock = 'end';
@@ -27,7 +27,6 @@ class Oper {
         }
         let fragment = new DocumentFragment(),
             p = document.createElement('p'),
-            span = document.createElement("span"),
             textArea = document.createElement("textarea"),
             divWrapBlock = document.createElement("div"),
             btn = document.createElement('button'),
@@ -43,7 +42,7 @@ class Oper {
         btn.innerHTML = '&#10060;';
         div.classList.add('divLayout');
         p.innerText = blocks[item].item;
-        if (item == 'protochka') {
+        if (item === 'protochka') {
             let startBlock = document.createElement('textarea');
             let middleBlock = document.createElement('textarea');
             let endBlock = document.createElement('textarea');
@@ -58,7 +57,7 @@ class Oper {
             return;
         }
         textArea.value = blocks[item].code.split(';').join('\n');
-        if (item == 'standart') {
+        if (item === 'standart') {
             div.append(p, textArea);
         } else {
             div.append(btn, p, textArea);
@@ -89,7 +88,7 @@ let protochka = {
 };
 for (let oper in blocks) {
     massOfOper.push(new Oper(oper));
-    if (oper == 'protochka') {
+    if (oper === 'protochka') {
         protochka = new Oper(oper);
     }
 }
@@ -100,7 +99,7 @@ protochka.createBtn = function () {
     div.classList.add('buttonsWrap');
     for (kontur in blocks.protochka.code) {
         let img = document.createElement('img');
-        if (kontur == 'start' || kontur == 'end') { continue; }
+        if (kontur === 'start' || kontur === 'end') { continue; }
         let btn = document.createElement('button');
         btn.innerHTML = blocks.protochka.code[kontur].title;
         btn.dataset.kont = blocks.protochka.code[kontur].id;
@@ -128,7 +127,7 @@ let gO = {
             this.start = 1;
 
             for (let i of massOfOper) {
-                if (i.item == 'standart') { continue; }
+                if (i.item === 'standart') { continue; }
                 i.createBtn();
             }
 
@@ -164,7 +163,7 @@ let gO = {
             input.type = 'text';
             input.name = variables;
             input.classList.add('inputVar');
-            if (variables == "name") {
+            if (variables === "name") {
                 spanVar.innerHTML = 'Name';
                 span = '';
                 input.value = standart.name;
@@ -186,7 +185,7 @@ let gO = {
 
     /** склеиваем собранную прогрмамму в массив, и выводим в файл */
     generateProg() {
-        existProg[0] = '', existProg[1] = '';
+        existProg[0] = ''; existProg[1] = '';
         gO.dlinaDetail();
         gO.getExistHead();
         gO.getBlockText();
@@ -197,7 +196,7 @@ let gO = {
     /** удаляет выбранный блок */
     removeBlock(e) {
         let block = e.target.parentNode;
-        if (e.target.parentNode.parentNode.id.substr(0, 3) == 'cut') {
+        if (e.target.parentNode.parentNode.id.substr(0, 3) === 'cut') {
             gO.hasCut = 0;
         }
         let oper = e.target.parentNode.parentNode.dataset.name;
@@ -233,7 +232,7 @@ let gO = {
         let diam = document.getElementById('divWrap#2');
         let dlina = document.getElementById('divWrap#531');
         // let razmerZag = typeM.children[1].value;
-        if (typeM.children[1].value == "1") {
+        if (typeM.children[1].value === "1") {
             dlina.children[1].value = diam.children[1].value * 1.155 + 1.0;
         } else {
             dlina.children[1].value = +diam.children[1].value + 1.0;
@@ -241,8 +240,8 @@ let gO = {
     },
     getExistHead() {
         let arrOfVar = document.querySelectorAll('#headLayout > div');
-        for (item of arrOfVar) {
-            if (item.childNodes[1].name == 'name') {
+        for (let item of arrOfVar) {
+            if (item.childNodes[1].name === 'name') {
                 existProg[0] += `${item.childNodes[1].value}\n`;
                 continue;
             }
@@ -251,7 +250,7 @@ let gO = {
     },
     getBlockText() {
         let div = document.querySelectorAll('.divBlocks > div:not(#head)');
-        for (item of div) {
+        for (let item of div) {
             existProg[1] += `${item.childNodes[1].childNodes[0].value}`;
         }
     }
