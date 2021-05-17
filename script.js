@@ -251,10 +251,15 @@ let gO = {
     getBlockText() {
         let div = document.querySelectorAll('.divBlocks > div:not(#head)');
         for (let item of div) {
-            existProg[1] += `${item.childNodes[1].childNodes[0].value}`;
-        }
+            if(item.id == 'standartBlock1'){
+                existProg[1] += `${item.childNodes[1].childNodes[0].value}`;//для стандартного блока
+            }
+            else
+            {
+                existProg[1] += `${item.childNodes[1].childNodes[1].value}`;//для остальных блоков  
+            }
     }
 }
-
+}
 
 window.onload = gO.generate;
