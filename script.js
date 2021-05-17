@@ -200,7 +200,14 @@ let gO = {
             gO.hasCut = 0;
         }
         let oper = e.target.parentNode.parentNode.dataset.name;
-
+        let arrOfVar = document.querySelectorAll('#headLayout > div');
+        for (let item of arrOfVar) {
+            for (let varOfBloc in blocks[oper].variables){
+            if (item.id.substr(7) == varOfBloc){
+                item.remove();
+            }
+        }
+        }
         block.parentNode.remove();
         //надо удалить переменные из шапки..
 
@@ -230,12 +237,18 @@ let gO = {
     dlinaDetail() {
         let typeM = document.getElementById('divWrap#1');
         let diam = document.getElementById('divWrap#2');
-        let dlina = document.getElementById('divWrap#531');
+        let dlina = document.getElementById('divWrap#530');
+        let diam1 = document.getElementById('divWrap#531');
         // let razmerZag = typeM.children[1].value;
+        if(dlina.children[1].value === "0"){
+            let par103 = document.getElementById('divWrap#103');
+            let par104 = document.getElementById('divWrap#104');
+            dlina.children[1].value = +par103+ +par104;
+        }
         if (typeM.children[1].value === "1") {
-            dlina.children[1].value = diam.children[1].value * 1.155 + 1.0;
+            diam1.children[1].value = diam.children[1].value * 1.155 + 1.0;
         } else {
-            dlina.children[1].value = +diam.children[1].value + 1.0;
+            diam1.children[1].value = +diam.children[1].value + 1.0;
         }
     },
     getExistHead() {

@@ -37,11 +37,27 @@ let blocks = {
         },
         code: "N14(CENTROVKA);T1400;G97S1300M3;M68;G0G99X0.0Z-2.0(Z-5.0)T14;M69;M1;M77;(M300);G1Z#109F0.03;G4U0.2;M68;G1Z-1.0F0.5;(M301);G0Z-2.0(Z-3.0);M69;M78;G0T0;M1; ;"//код блока
     },
-
+    centrPoperechnaia: {
+        item: "Центровка поперечная", 
+        variables: {
+            '#5': {value:1.2 , comment: '(DI SVERLA T3300)'},
+            '#116': {value:20.0 , comment: '(Z DO OSI SVERLA)'}
+                    },
+        code: "N3331(CENTROVKA STAR-16,20);T3300;M5(STOP GLAVNII SPINDEL);M8(YPRAVLENIE OSI C VKLIUCENO);(G101)(PODACA MM/OB DLIA PRIVODNOGO INSTRYMENTA STAR-16);M36S2000;G28H0.0;G50C0(NASTR KOORD SYS);M68;G0X#531Y0.0C-5.0Z[#116]T33;M69;M6(ZAG GL SP VKL PRI M5);M1;G1X[#531]F0.03;G1X[#2-#5-3.0]F0.03;G1U-1.1;G4U0.1;G0X#531;M7(ZAG GLAV SP VIKL);G0H180.0;M6(ZAG GLAV SP VKL PRI M5);G1X[#2+1.0]F0.03;G1X[#2-#5-3.0]F0.03;G1U-1.1;G4U0.1;G0G99X#531;G0X20.0;M9(OS C VIKL);M38(PR SPL STOP);G0T0;M1;G99G97G40M9; ;"
+    },
     sverlo: {
         item: "Сверло за 1 раз",
         variables: {},
         code: "N13(SVERLO);T1300;G97S1000M3;G0G99X0.0Z-1.0T13;G83Z5.5R-1.0Q2000F0.03;G80;M68;G0Z-2.0;M69;G0T0;M1; ;"
+    },
+    sverloPoperechnoe: {
+        item: "Сверло поперечное",
+        variables: {
+            '#5': {value:1.2 , comment: '(DI SVERLA T3300)'},
+            '#134': {value:10.0 , comment: '(SKOROST REZANIA NA SVERLE)'},
+            '#114': {value:0.02 , comment: '(PODACHA NA SVERLE)'}
+        },
+        code: "N3334(POPERECNOE SVERLENIE);T3400;M5;M8;(G101 STAR-16);M36S[FIX[[#134*1000.]/[3.14*#5]]];G28H0.0;G50C0;G0X#531Y0.0C-5.0Z[#103-#116]T34;M6;G1X[#2+1.0]F0.2;G4U0.1;G1X-2.0(+3.0)Q2000F#114;G80;G1X[#107+1.0]F1.0;G0G99X#531;M7(ZAG GLAV SP VIKL);G0H180.0;M6(ZAG GLAV SP VKL PRI M5);G1X[#2+1.0]F0.2;G4U0.1;G1X-2.0(+3.0)Q2000F#114;G80;G1X[#107+1.0]F1.0;G0G99X#531;G0X20.0;M9(OS C VIKL);M38(PR SPL STOP);G0T0;M1; ;"
     },
     torcovka: {
         item: "Торцовка",
@@ -51,7 +67,7 @@ let blocks = {
         item: "Проточка",
         variables: {
             '#111': { value: 0.8, comment: '(DLINA FASKI POD REZBY)' },
-            '#32': { value: 0.1, comment: '(OTKLONENIE OT DIAMETRA REZBY DLIA PROTOCHKI)' },
+            '#32': { value: 0.1, comment: '(OTKL OT DIAM REZBY DLIA PROTOCHKI)' },
             '#108': { value: 3.93, comment: '(DIAMETR GLADKOI CASTI)' }
         },
         code: {
@@ -74,6 +90,13 @@ let blocks = {
                 title: 'радиус под головой',
                 code: '(kontur3);G41G1X[[#107-#32]-#111*2.0];G1U[#111*2.0]W#111F[#505/2.0];G1Z[#106-ROUND[[#108-#129]*0.866]-ROUND[[#107 -#32-#129]*0.866]]F#505;G1Z[#106-ROUND[[#108-#129]*0.866]]X#129;G1Z#106X#108; ;',
             },
+            '4': {
+                id: 4,
+                img: '5.png',
+                title: 'тело и голова под отр.',
+                code: '(kontur4);G1G99X#531Z[#106-2.0]T3F1.0;M69;M161;G96S#503G41G1X[#108+0.05]W[#501]F0.06;Z[#103],A0.0,R#105;X[#119-0.25],A#135,R#130F0.08;Z[#530+#510+#509],A0.0F0.1;G1X#531W1.0F0.04;M171;M68;G40G0X60.0;M69;G0T0;M1; ;',
+            },
+
             end: 'G1X#531F0.05;M68;G0Z-2.0(Z-5.0);G0X60.0;G40;M69;M171;G0T0;M1; ;'
         }
 
@@ -91,8 +114,8 @@ let blocks = {
             '#111': { value: 0.8, comment: '(DLINA FASKI POD REZBY)' },
             '#123': { value: 20.0, comment: '(UGOL FASKI POD REZBU)' },
             '#117': { value: 0.2, comment: '(RADIYS SKRYGLENIA YGLA)' },
-            '#129': { value: 3.46, comment: '(DIAMETR POD NAKATKY)(DIAM POD NAREZ DLIA VINTOV)' },
-            '#17': { value: -3.0, comment: '(NACHALNAIA TOCHKA REZBY, Z, MM)' },
+            '#129': { value: 3.46, comment: '(DIAM POD NAKATKY)(DIAM POD NAREZ DLIA VINTOV)' },
+            '#17': { value: -3.0, comment: '(NACH TOCHKA REZBY, Z, MM)' },
             '#18': { value: 80, comment: '(PRIPYSK PERVOGO PROHODA, Q, MKM)' },
             '#19': { value: 30, comment: '(CISTOVOI PROHOD, Q, MKM)' },
             '#20': { value: -0.12, comment: '(DOPYSK NA POSLEDNII PROHOD, R, MM)' }
@@ -113,7 +136,7 @@ let blocks = {
         variables: {
             '#108': { value: 3.93, comment: '(DIAMETR GLADKOI CASTI)' },
             '#105': { value: 0.2, comment: '(RADIYS POD GOLOVOI)' },
-            '#31': { value: 0.25, comment: '(OTKLONENIE DIAMETRA FASKI OT SK T300)' }
+            '#31': { value: 0.25, comment: '(OTKL DIAM FASKI OT SK T300)' }
         },
         code: "N325;T300(PROTOCHKA DO GOLOVY S FASKOI NA SK);G96S80M#502;G0G99X#531Z[#106-2.0]T3;M161;G41G1X[#107-#32-0.05]W[#501]F0.04;G1Z[#106-0.1]X[#108-0.015];G1Z[#106+1.5]X#108F0.03;G1Z[#103-#105]F0.03;G3W#105U[#105*2.0]R#105;G1X[#531];G40G0W1.0U2.0;G42G1X[#531]Z[#103+[#531/2.-#2/2. +#31/2.]/TAN[90.-#135]]F0.2;G1X[#2-#31-#501*2.0]Z[#103-#501/TAN[90.-#135]]F0.06;G41G1X#531;M171;M68;G40G0X60.0W-2.0;M69;G0T0;M1; ;"
     },
@@ -125,7 +148,17 @@ let blocks = {
     nakatka: {
         item: "Накатка",
         variables: "",
-        code: "; ;"
+        code: "N2(NAKATKA);T200;G97S1500M3T2;G0G99X#531;G1Z[#530+0.7];G1X8.3F.1;G4U2.;G0X#531;G0T0;M1; ;"
+    },
+    kanavka: {
+        item: "Канавка",
+        variables: {
+            '#30': {value: 3.0, comment: '(SHIRINA KANAVKI)'},
+            '#31': {value: 10, comment: '(Z DO KANAVKI)'},
+            '#32': {value: 2, comment: '(SHIRINA KANAVOCHNOGO)'},
+            '#33': {value: 10, comment: '(DIAMETR KANAVKI)'}
+        },
+        code: "N200(KANAVKA);T200(KANAVKA);G96S30M3;G0G99X#531Z-3.0T6;G0Z[#31];G1X#33F0.03;G4U0.2;G0X#531;G0W[#30-#32];G1X#33;G4U0.2;G0X#531;G0X60.0;G0T0;M1; ;"
     },
     cut: {
         item: 'Отрезка',
