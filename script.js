@@ -10,6 +10,7 @@ class Oper {
         this.code = blocks[n].code;
         this.variables = blocks[n].variables;
         this.idArr = massOfOper.length;//место в массиве, для поиска;
+        this.img = blocks[n].img;
     }
     showCode() {
         console.log(this.item.code);
@@ -42,15 +43,15 @@ class Oper {
         btn.innerHTML = '&#10060;';
         div.classList.add('divLayout');
         p.innerText = blocks[item].item;
-        if (item === 'protochka') {
+        if (item === 'groove') {
             let startBlock = document.createElement('textarea');
             let middleBlock = document.createElement('textarea');
             let endBlock = document.createElement('textarea');
-            middleBlock.id = 'protochkaMiddleText';
+            middleBlock.id = 'grooveMiddleText';
             startBlock.value = blocks[item].code.start.split(';').join('\n');
             middleBlock.value = '';//blocks[n].code['1'].split(';').join('\n');
             endBlock.value = blocks[item].code.end.split(';').join('\n');
-            div.append(btn, p, startBlock, protochka.createBtn(), middleBlock, endBlock);
+            div.append(btn, p, startBlock, groove.createBtn(), middleBlock, endBlock);
             divWrapBlock.append(p, div);
             fragment.append(divWrapBlock);
             divBlocks.append(fragment);
@@ -73,8 +74,13 @@ class Oper {
 
     createBtn() {
         let btn = document.createElement('button');
+        let img = document.createElement('img');
+        let span = document.createElement('span');
+        img.src= 'img/'+this.img;
         btn.id = this.name;
-        btn.innerText = this.title;
+        span.innerText += this.title;
+        btn.append(img, span);
+
         btn.addEventListener('click', () => { massOfOper[this.idArr].createBlock() });
         btn.dataset.idArr = this.idArr;
         divWithBtn.append(btn);
@@ -84,37 +90,37 @@ class Oper {
 
 }
 let massOfOper = [];
-let protochka = {
+let groove = {
 };
 for (let oper in blocks) {
     massOfOper.push(new Oper(oper));
-    if (oper === 'protochka') {
-        protochka = new Oper(oper);
+    if (oper === 'groove') {
+        groove = new Oper(oper);
     }
 }
-protochka.createBtn = function () {
+groove.createBtn = function () {
 
     let div = document.createElement('div');
 
     div.classList.add('buttonsWrap');
-    for (kontur in blocks.protochka.code) {
+    for (kontur in blocks.groove.code) {
         let img = document.createElement('img');
         if (kontur === 'start' || kontur === 'end') { continue; }
         let btn = document.createElement('button');
-        btn.innerHTML = blocks.protochka.code[kontur].title;
-        btn.dataset.kont = blocks.protochka.code[kontur].id;
-        img.src = 'img/' + blocks.protochka.code[kontur].img;
-        btn.onclick = protochka.btnProtochka;
-        btn.classList.add('buttonsProtochka');
+        btn.innerHTML = blocks.groove.code[kontur].title;
+        btn.dataset.kont = blocks.groove.code[kontur].id;
+        img.src = 'img/' + blocks.groove.code[kontur].img;
+        btn.onclick = groove.btnGroove;
+        btn.classList.add('buttonsGroove');
         btn.append(img);
         div.append(btn);
 
     }
     return div;
 }
-protochka.btnProtochka = function (e) {
-    let middleText = document.getElementById('protochkaMiddleText');
-    middleText.value += blocks.protochka.code[e.target.dataset.kont].code.split(';').join('\n');
+groove.btnGroove = function (e) {
+    let middleText = document.getElementById('grooveMiddleText');
+    middleText.value += blocks.groove.code[e.target.dataset.kont].code.split(';').join('\n');
 }
 let gO = {
     start: 0,
@@ -267,7 +273,7 @@ let gO = {
             if(item.id === 'standartBlock1'){
                 existProg[1] += `${item.childNodes[1].childNodes[0].value}`;//для стандартного блока
             }
-            else if(item.dataset.name == 'protochka'){
+            else if(item.dataset.name == 'groove'){
                 existProg[1] += `${item.childNodes[1].childNodes[1].value+item.childNodes[1].childNodes[3].value+item.childNodes[1].childNodes[4].value}`;//для блока c проточками
             }
                 else {

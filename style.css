@@ -19,7 +19,15 @@ body {
     display: flex;
     flex-direction: column;
 }
-
+#divWithBtn > button{
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 5px;
+}
+#divWithBtn  button > img{
+    width: 20px;
+    margin: 0 5px 0 0;
+}
 .divBlocks {
     padding: 0 0 0 20px;
     /*justify-content: space-evenly;*/
@@ -85,11 +93,11 @@ body {
     flex-wrap: wrap;
 }
 
-.buttonsProtochka{
+.buttonsGroove{
     width: 33%;
 }
 
-#protochkaMiddleText{
+#grooveMiddleText{
     height: 500px;
 }
 
