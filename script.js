@@ -267,8 +267,10 @@ let gO = {
             if(item.id === 'standartBlock1'){
                 existProg[1] += `${item.childNodes[1].childNodes[0].value}`;//для стандартного блока
             }
-            else
-            {
+            else if(item.dataset.name == 'protochka'){
+                existProg[1] += `${item.childNodes[1].childNodes[1].value+item.childNodes[1].childNodes[3].value+item.childNodes[1].childNodes[4].value}`;//для блока c проточками
+            }
+                else {
                 existProg[1] += `${item.childNodes[1].childNodes[1].value}`;//для остальных блоков  
             }
     }

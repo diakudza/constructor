@@ -2,9 +2,11 @@
     margin: 0;
     padding: 0;
 }
+
 body {
     background: #333;
 }
+
 .main {
     display: flex;
     flex-direction: row;
@@ -16,7 +18,8 @@ body {
     width: 150px;
     display: flex;
     flex-direction: column;
-    }
+}
+
 .divBlocks {
     padding: 0 0 0 20px;
     /*justify-content: space-evenly;*/
@@ -26,6 +29,7 @@ body {
     display: flex;
     align-content: flex-start;
 }
+
 .block{
     
     background: white;
@@ -48,44 +52,51 @@ body {
     flex-direction: column;
     align-items: flex-start;
     font-size: 14px;
-    
 }
 
 .block:hover > .divLayout{
     display: flex;
     min-height: 300px;
     width: 400px;
-    padding: 15px;
+    padding: 5px 8px 5px 5px;
     flex-direction: column;
     border-radius: 10px;
     top: -5px;
     background: white;
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    
 }
+
 .divLayout {
     display: none;
-
     z-index: 10;
     position: absolute;
     overflow: hidden;
-    
 }
+
 .btnClose{
     width: 22px;
+    background: transparent;
+    border: none;
+    margin: 0 0 5px;
 }
+
 .buttonsWrap{
     display: flex;
+    flex-wrap: wrap;
 }
+
 .buttonsProtochka{
-    
+    width: 33%;
 }
+
 #protochkaMiddleText{
     height: 500px;
 }
+
 .head span{
     width: auto;
 }
+
 .block::after {
     content: "→";
     position: absolute;
@@ -94,31 +105,38 @@ body {
     top:35%;
     font-size: large;
 }
+
 .end::after{
     content: none;
 }
+
 .divWrap {
     display: flex;
    white-space: nowrap;
 }
-.divWrap >span {
-    width: 30px;
+
+.divWrap > span {
+	width: 30px;
+
 }
 
 .inputVar{
     width: 30px;
 }
+
 .BlockTextArea{
     width: 100%;
-    height: 60vh;
+    height: 300px;
     resize: none;
     border-radius: 5px;
 }
+
 #divWithBtn button {
     width: 100%;
     height: 40px;
     background:white;
     }
+
 #save {
     display: flex;
     box-sizing: border-box;
@@ -130,11 +148,13 @@ body {
     text-decoration: none;
     border: 1px solid black;
 }
+
 #textArea {
     width: 100%;
     resize: none;
     height: 70%;
 }
+
 #textVariables {
     width: 100%;
     resize: none;

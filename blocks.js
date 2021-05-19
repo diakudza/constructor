@@ -4,11 +4,6 @@ let standart = {//стандартные перменные, будут вста
     '#1': { value: 0, comment: '(0-KR,1-SK)' },
     '#2': { value: 10.0, comment: '(RAZMER ZAGOTOVKI)' },
     '#530': { value: 0, comment: '(DLINA DETALI)' },
-    // '#103': { value: 20.0, comment: '(DL DO GOLOVI)' },
-    // '#104': { value: 2.8, comment: '(DLINA GOLOVY)' },
-    // '#119': { value: 8.05, comment: '(DIAMETR BYRTA)' },
-    // '#130': { value: 0.3, comment: '(R PR BURTA)' },
-    // '#135': { value: 90.0, comment: '(NAKLON GOLOVY / YGOL FASKI NA SK)' },
     '#501': { value: 0.2, comment: '(RADIUS PROHODNOI PLASTINY)' },
     '#502': { value: 4, comment: '(NAPRAVLENIE VRASHENIA M3 / M4)' },
     '#503': { value: 20, comment: '(SKOROST REZANIA DLIA PROHODNOGO)' },
@@ -21,12 +16,6 @@ let standart = {//стандартные перменные, будут вста
     '#508': { value: 11.0, comment: '(15.0++ +)(OVER - TRAVEL Z1)' },
     '#531': { value: 0, comment: '(DIAM ZAGOTOVKI+1mm)' },
 };
-
-// IF[#530EQ0]THEN#530=[#103+#104](DLINA DETALI)
-// IF[#106EQ0]THEN#106=[#530-#104](DLINA T,L0)
-// IF[#1EQ0]THEN#531=[#2+1.0](DIAM ZAGOTOVKI KRYG+1MM)
-// IF[#1EQ1]THEN#531=[#2*1.155+1.0](DIAM ZAGOTOVKI SK+1MM)
-
 
 let blocks = {
     //Объекст со стандартными блоками
@@ -47,8 +36,20 @@ let blocks = {
     },
     sverlo: {
         item: "Сверло за 1 раз",
-        variables: {},
+        variables: {
+            '#7': {value:5.0 , comment: '(DIAMETR SVERLA)'}
+        },
         code: "N13(SVERLO);T1300;G97S1000M3;G0G99X0.0Z-1.0T13;G83Z5.5R-1.0Q2000F0.03;G80;M68;G0Z-2.0;M69;G0T0;M1; ;"
+    },
+    sverloCikl: {
+        item: "Сверления циклом",
+        variables: {
+            '#23': {value:10.0 , comment: '(GLYBINA OTVERSTIA,ESLI #23=#530-OTVERSTIE SKVOZNOE)'},
+            '#7': {value:5.0 , comment: '(DIAMETR SVERLA)'},
+            '#506': {value:18.0 , comment: '(SKOROST REZANIA NA SVERLO T1300)'},
+            '#507': {value:0.06 , comment: '(PODACHA NA SVERLO T1300)'}
+        },
+        code: "N13(SVERLENIE CIKL GLYBOKOGO SVERLENIA);IF[#23EQ#530]THEN#23=[#530+#510+#509+3.0];#25=FUP[#23/#7](KOL-VO RAZ);#26=#23/#25(PRIRASHENIE Z);T1300;G97S[FIX[[#506*1000.0]/[3.14*#7]]]M3;M68;G0G99X0.0Z-1.0T13;M69;M1;(M162);WHILE[#25GE1]DO1;#27=[#23-#26*[#25-1.0]];#28=[#23-#26*[#25-1.0]-2.0];G1Z[ROUND[#27]]F#507;G4U0.1;M68;IF[#25EQ1.0]GOTO131;G0Z-2.0;M69;G4U1.0;G1Z[ROUND[#28]]F1.0;#25=[#25-1.0];END1;M68;M172;N131;G1Z-1.0F0.5;M172;G0Z-2.0;M69;G0T0;M1; ; "
     },
     sverloPoperechnoe: {
         item: "Сверло поперечное",
@@ -58,6 +59,17 @@ let blocks = {
             '#114': {value:0.02 , comment: '(PODACHA NA SVERLE)'}
         },
         code: "N3334(POPERECNOE SVERLENIE);T3400;M5;M8;(G101 STAR-16);M36S[FIX[[#134*1000.]/[3.14*#5]]];G28H0.0;G50C0;G0X#531Y0.0C-5.0Z[#103-#116]T34;M6;G1X[#2+1.0]F0.2;G4U0.1;G1X-2.0(+3.0)Q2000F#114;G80;G1X[#107+1.0]F1.0;G0G99X#531;M7(ZAG GLAV SP VIKL);G0H180.0;M6(ZAG GLAV SP VKL PRI M5);G1X[#2+1.0]F0.2;G4U0.1;G1X-2.0(+3.0)Q2000F#114;G80;G1X[#107+1.0]F1.0;G0G99X#531;G0X20.0;M9(OS C VIKL);M38(PR SPL STOP);G0T0;M1; ;"
+    },
+    rastochka: {
+        item: "Расточка",
+        variables: {
+            '#8': {value:10.0 , comment: '(DIAMETR RASTACIVAEMOGO OTVERSTIA)'},
+            '#112': {value:0.02 , comment: '(PODACHA NA RASTOCHKU)'},
+            '#114': {value:0.4, comment: '(FASKA V OTVERSTII)'},
+            '#121': {value:20.0 , comment: '(SKOROST REZANIA T1200)'},
+            '#124': {value:0.25 , comment: '(PRIPYSK.NA.STORONY)'}
+        },
+        code: "N21300(T1200 RASTOCHKA,KORREKTOR T12);T1200;G96S#121M3;M68;G0G99X#7Z-1.0T12;M1;IF[[[#8-#7]/2.]GT#124]GOTO21310;GOTO21330;N21310(PEREHOD);(RASTOCKA BEZ FASKI CIKL);(RASTOCHKA PREDVARITELNO);(RASTOCKA BEZ KOMPENSACII RADIUSA);#27=[#8-#7]/2.0(RASCET PRIPYSKA NA OBRABOTKY NA STORONY);#28=FUP[#27/#124](KOL-VO PROHODOV);#29=#27/#28(PRIRASHENIE PO X NA STORONY,DEISTVITELNII PRIPYSK);WHILE[#28GE1.]DO1;M1;G1X[ROUND[#8-#29*2.*[#28-1.0]]]F#112;G1Z[#530+0.4]F#112;G1U-0.1;M68;G0Z-2.0;M69;IF[#28EQ1.0]GOTO21315;#28=[#28-1.0];M1;END1;N21315(KONEC RASTACHIVANIA);GOTO21398;N21320(RASTOCKA BEZ FASKI);IF[#114GT0]GOTO21330;G1Z[#530+#510]F#112;G1U-0.2;M68;G0Z-1.0;M69;N21325;GOTO21398;N21330(RASTOCKA S FASKOI BEZ KOMPENSACII RADIUSA);G0X[#8+#114*2.0+0.2];M1;G1Z-0.1F#112;G1X#8W[#114+0.1];G1Z[#530+0.3]F#112;G1X[#8-0.1];M68;G0Z-1.0;M69;N21335;GOTO21398;N21398;G0T0;M1; ;"
     },
     torcovka: {
         item: "Торцовка",
@@ -75,7 +87,7 @@ let blocks = {
             '1': {
                 id: 1,
                 img: '1.png',
-                title: 'фаска+проточка',
+                title: 'фаска и проточка',
                 code: '(kontur1);G41G1X[[#107-#32]-#111*2.0];G1U[#111*2.0]W#111F[#505/2.0];G1Z[#106-ROUND[[#108-#129]*0.866]-ROUND[[#107 -#32-#129]*0.866]]F#505;G1Z[#106-ROUND[[#108-#129]*0.866]]X#129;G1Z#106X#108; ;',
             },
             '2': {
@@ -96,8 +108,32 @@ let blocks = {
                 title: 'тело и голова под отр.',
                 code: '(kontur4);G1G99X#531Z[#106-2.0]T3F1.0;M69;M161;G96S#503G41G1X[#108+0.05]W[#501]F0.06;Z[#103],A0.0,R#105;X[#119-0.25],A#135,R#130F0.08;Z[#530+#510+#509],A0.0F0.1;G1X#531W1.0F0.04;M171;M68;G40G0X60.0;M69;G0T0;M1; ;',
             },
+            '5': {
+                id: 5,
+                img: '6.png',
+                title: 'Винт не выпадающий без р.',
+                code: '(kontur5);G1X-0.5F#505;G41,A90.0,R0.3F0.03;G1Z#111X#129,A20.0;G1,A0.0;G1Z[#106]X#108,A330.0;G1Z[#103-#105],A0.0;G3W#105U[#105*2.0]R#105;G1X[#119-#130*2.0];G2W#130U[#130*2.0]R#130;G1Z[#530+#509+#510]; ;',
+            },
+            '6': {
+                id: 6,
+                img: '4.png',
+                title: 'Болт кр. без рез.',
+                code: '(kontur6);G96S#503G41G1,A90.0,R#117F0.03;Z#111X#129,A#123F0.02;,A0.0F0.03;Z#106X#108,A30.;Z[#530-#104],A0.0,R#105;X#119,A#135,R#130F0.02;G1Z[#530+#510+#509],A0.0F0.03; ;',
+            },
+            '7': {
+                id: 7,
+                img: '4.png',
+                title: 'Болт шк. без рез.',
+                code: '(kontur7);G96S#503G41X[#129-ROUND[[#111*TAN[#123]]*2.]],R0.3;G1X#129Z#111F0.03;Z[#106-0.5];G3W0.5U1.0R0.5;G40G1X[#108-0.3];G41G1X#108W0.3;GOTO1252;G1Z[#106-ROUND[[#108-#129]*0.866]];Z#106X#108;N1252;G1Z[#103-#105];G3W#105U[#105*2.0]R#105F0.02;G96S40(S60)G1X[#531]F0.03; ;',
+            },
+            '8': {
+                id: 8,
+                img: '4.png',
+                title: 'Торцовка гайки',
+                code: '(kontur7)G96S65M#502;G1G99X[#531+1.0]Z-1.0F1.0T3;G4U#4;G42G1U-0.4Z[#530+#509+#510]F0.03;G1X[#3*1.155-#122];G1,A180.0F0.03;G1Z0.0X[#3-0.3](X[#3-0.3]),A[270.0-#135];G1X-0.5F0.03;G1U-0.2Z-0.5;G40G1W-1.0F0.2;(udalit standartnii konec); ;',
+            },
 
-            end: 'G1X#531F0.05;M68;G0Z-2.0(Z-5.0);G0X60.0;G40;M69;M171;G0T0;M1; ;'
+            end: 'G1X#531W1.0F0.05;M68;G0Z-2.0(Z-5.0);G0X60.0;G40;M69;M171;G0T0;M1; ;'
         }
 
 
@@ -131,24 +167,36 @@ let blocks = {
         code: "N32(FREZEROVKA SK);T3200;M5;M8;M36S2000;G28H0.0;G0C14.0;G50C0;G0X#3Y[#531+6.0]Z[#103+2.5]C0.0T32;#29=3.0;WHILE[#29LE360.0]DO1;#29=#29+60.0;G0C#29;M6;G1X[#3-0.1]F0.2;G1Y-[#3*1.155+5.0]F0.03;G0Y[#3*1.155+5.0];G0X#531;M7;END1;G0G99X#531;M68;G0X60.0Z-1.0;M69;G18;M9;M38;G0T0;M1; ;"
 
     },
-    protochkaDoGoloviSK: {
-        item: "Проточка до головы ШК",
-        variables: {
-            '#108': { value: 3.93, comment: '(DIAMETR GLADKOI CASTI)' },
-            '#105': { value: 0.2, comment: '(RADIYS POD GOLOVOI)' },
-            '#31': { value: 0.25, comment: '(OTKL DIAM FASKI OT SK T300)' }
-        },
-        code: "N325;T300(PROTOCHKA DO GOLOVY S FASKOI NA SK);G96S80M#502;G0G99X#531Z[#106-2.0]T3;M161;G41G1X[#107-#32-0.05]W[#501]F0.04;G1Z[#106-0.1]X[#108-0.015];G1Z[#106+1.5]X#108F0.03;G1Z[#103-#105]F0.03;G3W#105U[#105*2.0]R#105;G1X[#531];G40G0W1.0U2.0;G42G1X[#531]Z[#103+[#531/2.-#2/2. +#31/2.]/TAN[90.-#135]]F0.2;G1X[#2-#31-#501*2.0]Z[#103-#501/TAN[90.-#135]]F0.06;G41G1X#531;M171;M68;G40G0X60.0W-2.0;M69;G0T0;M1; ;"
-    },
     frezShlic: {
         item: "Фрезеровка Шлица",
         variables: "",
         code: "N3100(MODYL FREZEROVANIA SLITZCA);G65P8060F#9; ;"
     },
+    frezLisok: {
+        item: "Фрезеровка Лысок",
+        variables: {
+            "#136": {value:2.0, comment: '(R FREZY)'},
+            "#31":{value:0, comment: '(RAZMER LISOK)'},
+            "#32":{value:2.5, comment: '(RAZMER DO LISOK)'}, 
+            "#33":{value:5.0, comment: '(DL LISOK)'}
+            
+    },
+        code: "N31(FREZEROVKA LISOK);G10P32Q0R#136;T3200;M5;M8;G98;(G101);M36S4000;G28H0.0;G50C0;G0X#531Y15.0C0.0Z[#32+#136]T32;M6;G1X#31F200;G1Y-8.0F40;G1Y0.0;G1Z[#32+#33-#136];G1Y8.0;G1Y-15.0;M7;G0H180.0;G1Z[#32+#136]F40;M6;G1Y8.0F40;G1Y0.0;G1Z[#32+#33-#136];G1Y-8.0;G1Y15.0;G1X24.0F200;G0Z-11.0;G0G99X#531;G18;M9;M38;G0T0;M1; ;"
+    },
+        
     nakatka: {
         item: "Накатка",
         variables: "",
         code: "N2(NAKATKA);T200;G97S1500M3T2;G0G99X#531;G1Z[#530+0.7];G1X8.3F.1;G4U2.;G0X#531;G0T0;M1; ;"
+    },
+    metchik: {
+        item: "Метчик",
+        variables: {
+            '#514': {value: 200, comment: '(OBOROTY NA METCHIK)'},
+            '#126': {value:0.5, comment: '(SHAG METCHIKA)'},
+            '#22': {value:8.0, comment: '(GLYBINA REZBY VNYTRENNEI)'}
+    },
+        code: "N11(MODYL GESTKOGO NAREZANIA REZBY METCHIKOM M29 G84);T1300(VIZOV METCHIKA);G97S#514M3;M68;G0G99Y0.0X0.0Z-2.0T13;M69;M1;(M304);G99M5;M29S#514;G84Z#22F#126;G80;M68;G0Z-2.;M69;(M305);G0T0;M1; ;"
     },
     kanavka: {
         item: "Канавка",
