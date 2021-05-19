@@ -99,9 +99,12 @@ body {
 }
 .divWrap {
     display: flex;
-   /* white-space: nowrap;*/
-
+   white-space: nowrap;
 }
+.divWrap >span {
+    width: 30px;
+}
+
 .inputVar{
     width: 30px;
 }

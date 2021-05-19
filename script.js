@@ -203,7 +203,7 @@ let gO = {
         let arrOfVar = document.querySelectorAll('#headLayout > div');
         for (let item of arrOfVar) {
             for (let varOfBloc in blocks[oper].variables){
-            if (item.id.substr(7) == varOfBloc){
+            if (item.id.substr(7) === varOfBloc){
                 item.remove();
             }
         }
@@ -264,7 +264,7 @@ let gO = {
     getBlockText() {
         let div = document.querySelectorAll('.divBlocks > div:not(#head)');
         for (let item of div) {
-            if(item.id == 'standartBlock1'){
+            if(item.id === 'standartBlock1'){
                 existProg[1] += `${item.childNodes[1].childNodes[0].value}`;//для стандартного блока
             }
             else
