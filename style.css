@@ -11,7 +11,7 @@ body {
     display: flex;
     flex-direction: row;
     padding: 20px;
-    width: 100%;
+    width: 96vw;
 }
 
 #divWithBtn {
@@ -47,6 +47,7 @@ body {
     background: #519d59a6;
     text-decoration: none;
     border: 1px solid black;
+    color: #FFF;
 }
 
 .divBlocks {
@@ -118,21 +119,27 @@ body {
     flex-wrap: wrap;
 }
 
-.buttonsWrap button{
-   display: flex;
-flex-wrap: wrap;
-background: transparent;
-border: 1px solid;
-height: 40px;
-font-size: 11px;
-}
 .buttonsWrap button:hover{
     background: #47784c;
 }    
 .buttonsGroove{
+    display: flex;
+    /*flex-wrap: wrap;*/
+    background: transparent;
+    border: 1px solid;
+    height: 40px;
+    font-size: 11px;
     width: 33%;
+    justify-content: center;
+    align-items: center;
 }
+.grooveBtnImg{
 
+}
+.grooveBtnSpan{
+    display: flex;
+    flex-wrap: wrap;
+}
 #grooveMiddleText{
     height: 500px;
 }
@@ -209,4 +216,5 @@ font-size: 11px;
 
 .copy{
     margin-left: 20px;
+    color: #FFFFFF;
 }

@@ -1,5 +1,3 @@
-//let textArea = document.getElementById('textArea');
-//let textVariables = document.getElementById('textVariables');
 let divWithBtn = document.getElementById('divWithBtn');
 let divBlocks = document.getElementsByClassName('divBlocks')[0];
 class Oper {
@@ -85,13 +83,13 @@ class Oper {
         btn.dataset.idArr = this.idArr;
         divWithBtn.append(btn);
     }
-    removeBlock() { }
-    exportCodeInArr() { }
+   // removeBlock() { }
+   // exportCodeInArr() { }
 
 }
 let massOfOper = [];
-let groove = {
-};
+let groove = {};
+
 for (let oper in blocks) {
     massOfOper.push(new Oper(oper));
     if (oper === 'groove') {
@@ -101,23 +99,26 @@ for (let oper in blocks) {
 groove.createBtn = function () {
 
     let div = document.createElement('div');
-
     div.classList.add('buttonsWrap');
     for (kontur in blocks.groove.code) {
         let img = document.createElement('img');
+        let span = document.createElement('span');
         if (kontur === 'start' || kontur === 'end') { continue; }
         let btn = document.createElement('button');
-        btn.innerHTML = blocks.groove.code[kontur].title;
+        img.classList.add('grooveBtnImg');
+        span.classList.add('grooveBtnSpan');
+        span.innerHTML = blocks.groove.code[kontur].title;
         btn.dataset.kont = blocks.groove.code[kontur].id;
         img.src = 'img/' + blocks.groove.code[kontur].img;
         btn.onclick = groove.btnGroove;
         btn.classList.add('buttonsGroove');
-        btn.append(img);
+        btn.append(img,span);
         div.append(btn);
 
     }
     return div;
 }
+
 groove.btnGroove = function (e) {
     let middleText = document.getElementById('grooveMiddleText');
     middleText.value += blocks.groove.code[e.target.dataset.kont].code.split(';').join('\n');
@@ -126,7 +127,7 @@ let gO = {
     start: 0,
     blocks: 0,
     hasCut: 0,
-
+    progName: '',
     /**метод запуска рендера кнопок и шапки */
     generate() {
         if (gO.start === 0) {
@@ -197,7 +198,7 @@ let gO = {
         gO.getBlockText();
         let myData = 'data:application/txt;charset=utf-8,' + encodeURIComponent(existProg[0] + existProg[1].split(';').join('\n'));
         this.href = myData;
-        this.download = 'O0020.txt';
+        this.download = gO.name;
     },
     /** удаляет выбранный блок */
     removeBlock(e) {
@@ -261,6 +262,7 @@ let gO = {
         let arrOfVar = document.querySelectorAll('#headLayout > div');
         for (let item of arrOfVar) {
             if (item.childNodes[1].name === 'name') {
+                this.name = item.childNodes[1].value.substr(0,5);
                 existProg[0] += `${item.childNodes[1].value}\n`;
                 continue;
             }
